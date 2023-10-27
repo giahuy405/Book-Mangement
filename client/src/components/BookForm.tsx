@@ -22,10 +22,7 @@ const validationSChema = z.object({
     .string()
     .trim()
     .min(3, { message: "Description must be at least 3 characters long" }),
-  price: z
-    .string()
-    .trim()
-    .min(4, { message: "Price cannot be less than 1000 VNĐ" }),
+  price: z.number().min(4, { message: "Price cannot be less than 1000 VNĐ" }),
   author: z
     .string()
     .trim()
@@ -48,7 +45,7 @@ const validationSChema = z.object({
 type FormValues = z.infer<typeof validationSChema>;
 
 const BookForm = ({}: Props) => {
-  const { addBook ,editBook,selectedBook} = useBook();
+  const { addBook, editBook, selectedBook } = useBook();
 
   const { setForm } = useModalForm();
   const {
@@ -61,19 +58,19 @@ const BookForm = ({}: Props) => {
     defaultValues: {
       name: selectedBook?.name || "",
       description: selectedBook?.description || "",
-      price: selectedBook?.price || "",
+      price: +selectedBook?.price || null,
       author: selectedBook?.author || "",
       publicationDate: selectedBook?.publicationDate || "",
       tags: selectedBook?.tags || [],
-    },  
+    },
     resolver: zodResolver(validationSChema),
   });
   const [loading, { hideLoading, showLoading }] = useLoading();
   const { fetchTag, allTag } = useTag();
 
-  useEffect(()=>{
-    console.log(selectedBook?.tags,'selectedBook')
-  },[selectedBook])
+  useEffect(() => {
+    console.log(selectedBook?.tags, "selectedBook");
+  }, [selectedBook]);
 
   useEffect(() => {
     if (!selectedBook) return;
@@ -89,11 +86,10 @@ const BookForm = ({}: Props) => {
     const newValues = { ...values, price: +values.price };
 
     //edit mode
-    if(selectedBook){
+    if (selectedBook) {
       editBook(selectedBook.id, newValues);
-    }else{
+    } else {
       addBook(newValues);
-
     }
     hideLoading();
     reset();
@@ -107,7 +103,6 @@ const BookForm = ({}: Props) => {
     const allTagID: never[] = [];
     setValue("tags", allTagID);
   };
- 
 
   return (
     <form
@@ -205,6 +200,7 @@ const BookForm = ({}: Props) => {
           </div>
           <div className="absolute -top-2 right-0">
             <Button
+              disabled={loading}
               type="button"
               size="sm"
               variant="text"

@@ -60,11 +60,17 @@ const TagForm = () => {
         {allTag.map((item) => (
           <button
             type="button"
-            disabled={loading} // 
+            disabled={loading} //
             className="relative group"
-            onClick={() => {
-              setAllTag(allTag.filter((item2) => item2.id !== item.id));
-              deleteTag(item.id);
+            onClick={async () => {
+              // setAllTag(allTag.filter((item2) => item2.id !== item.id));
+              try {
+                await showLoading();
+                await deleteTag(item.id);
+                await hideLoading();
+              } catch (err) {
+                hideLoading();
+              }
             }}
           >
             <Chip key={item.id} value={item.name} color={item.color as color} />
