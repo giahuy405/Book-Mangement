@@ -17,7 +17,7 @@ const BookItem = ({ item }: Props) => {
   const [openModal,setOpenModal] = useState(false);
   const handleOpen = () => setOpenModal(!openModal);
   const {form,setForm} = useModalForm();
-  const {setSelectedBook,selectedBook} = useBook();
+  const {setSelectedBook} = useBook();
 
   const handleEdit = (item:BookType) =>{
     setForm('book')

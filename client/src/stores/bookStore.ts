@@ -8,7 +8,7 @@ type BookStoreState = {
 
 type BookStoreActions = {
   setAllBook: (book: BookType[]) => void;
-  setSelectedBook: (book: BookType) => void;
+  setSelectedBook: (book: BookType | null) => void;
 };
 
 const useBookStore = create<BookStoreState & BookStoreActions>((set) => ({
@@ -17,7 +17,7 @@ const useBookStore = create<BookStoreState & BookStoreActions>((set) => ({
   setAllBook: (book: BookType[]) => {
     set({ allBook: book });
   },
-  setSelectedBook: (book: BookType) => {
+  setSelectedBook: (book: BookType|null) => {
     set({ selectedBook: book });
   },
 }));

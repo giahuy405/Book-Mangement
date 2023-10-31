@@ -11,7 +11,7 @@ import AppChip from "./AppChip";
 import { useTag } from "../hooks/useTag";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Switch, Case } from "react-if";
-interface Props {}
+interface Props { }
 
 const validationSChema = z.object({
   name: z
@@ -44,8 +44,8 @@ const validationSChema = z.object({
 });
 type FormValues = z.infer<typeof validationSChema>;
 
-const BookForm = ({}: Props) => {
-  const { addBook, editBook, selectedBook } = useBook();
+const BookForm = ({ }: Props) => {
+  const { addBook, editBook, selectedBook, setSelectedBook } = useBook();
 
   const { setForm } = useModalForm();
   const {
@@ -58,7 +58,7 @@ const BookForm = ({}: Props) => {
     defaultValues: {
       name: selectedBook?.name || "",
       description: selectedBook?.description || "",
-      price: +selectedBook?.price || null,
+      price: +selectedBook?.price || 1000,
       author: selectedBook?.author || "",
       publicationDate: selectedBook?.publicationDate || "",
       tags: selectedBook?.tags || [],
@@ -87,12 +87,14 @@ const BookForm = ({}: Props) => {
 
     //edit mode
     if (selectedBook) {
-      editBook(selectedBook.id, newValues);
+      await editBook(selectedBook.id, newValues);
     } else {
-      addBook(newValues);
+      await addBook(newValues);
     }
     hideLoading();
     reset();
+    setSelectedBook(null)
+    setForm(null)
   };
   const selectAllTag = () => {
     let allTagID: string[] = [];
